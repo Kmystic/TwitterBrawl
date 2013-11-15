@@ -21,7 +21,7 @@ class TwitterUser():
 			self.user_text = self.user_text + tweet
 		self.user_friends = tc.get_friends(user_id)
 
-
+'''
 def main():
 	tb = TwitterUser()
 	tb.get_information("kmystic524")
@@ -37,3 +37,4 @@ def main():
 
 if __name__ == "__main__":
 	main()
+'''

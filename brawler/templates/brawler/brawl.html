@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html>
+{% load staticfiles %}
+<head>
+  <title>TwitterBrawl - Brawl</title>
+  <link  rel="stylesheet" type="text/css" href="{% static 'brawler/style.css' %}" />
+</head>
+
+
+<body>
+
+<!--BEGIN header-->
+<div align="center">
+  <img width="50%" <img src=" ../../static/brawler/images/logo.png" align = "middle"><br>
+  <img width="20%" <img src=" ../../static/brawler/images/TwitterBrawl.png">
+</div>
+<br>
+<ul class="nav">
+  <li><a href="/login">Login</a></li>
+  <!--
+  {% if has_registered %}
+  <li><a href="../register">Pay</a></li>
+    {% else %}
+  <li><a href="../register">Register</a></li>
+    {% endif %}
+  -->
+  <li><a href="/about">About</a></li>
+  <li><a href="/brawl">Brawl</a></li>
+</ul>
+
+<hr class="horizontal">
+<!--END header-->
+
+<!--BEGIN body-->
+<h1 align = "center"> Brawl </h1>
+
+<form action="" method="post"
+  {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}> {%csrf_token %}
+  {{ form.non_field_errors }}
+    <div class="fieldWrapper">
+      {{ form.opponent1.errors }}
+      <label for="opponent1"><b>Opponent 1</b> <br></label>
+      {{ form.opponent1 }}
+  </div>
+    <div class="fieldWrapper">
+      {{ form.opponent2.errors }}
+      <label for="opponent2"><b>Opponent 2</b><br></label>
+      {{ form.opponent2 }}
+  </div>
+<input type="submit" value="Submit" />
+
+
+</form>
+
+
+<!--BEGIN footer-->
+<hr class="horizontal">
+
+<div align="center">
+  TwitterBrawl &copy; 2013
+</div>
+<!--END footer-->
+</body>
+
+
+</html>

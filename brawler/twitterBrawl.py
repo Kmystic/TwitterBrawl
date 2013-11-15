@@ -147,7 +147,7 @@ class TwitterBrawl():
 
 
 
-
+'''
 def main():
 	mainUser = twitterUsers.TwitterUser()
 	mainUser.get_information("kmystic524")
@@ -166,4 +166,4 @@ def main():
 if __name__ == "__main__":
 	main()
 
-
+'''

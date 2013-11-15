@@ -1,0 +1,157 @@
+ul.nav {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-align: center;
+	font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", sans-serif;;
+}
+
+.nav li {
+	display: inline;
+}
+
+.nav a {
+	width: 10%;
+	text-align: center;
+	display: inline-block;
+	padding-bottom: 10px;
+	padding-top: 10px;
+	color: white;
+	text-decoration: none;
+	background: #1bb2e9;
+}
+
+.nav a:hover {
+	color: #1bb2e9;
+	background: #006a91; /*Dark Blue*/
+}
+
+ul.nav li:first-child a{
+	margin-left: 0;
+}
+
+hr.horizontal {
+	height: 1px;
+	width: 100%;
+	margin-top: 15px;
+	border: 0;
+	background: #1bb2e9; /* Light blue*/
+}
+
+
+div.maincontent {
+	
+	padding: 70px;
+}
+
+div.fbfeed {
+	float: right;
+}
+
+iframe.registration {
+	width:700px;
+	height:2225px;
+}
+
+#memberoptions{
+   float:left;
+   width:100%;
+   overflow:hidden;
+   position:relative;
+}
+#memberoptions ul li a{
+   color:#000;
+   
+}
+#memberoptions div {
+  width: 20px;
+}
+h1 {
+	color:  #1bb2e9;
+  font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", sans-serif;;
+} 
+h2 {
+  color:  #1bb2e9;
+  margin: 0;
+  padding: 0;
+  font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", sans-serif;;
+}
+ 
+#memberoptions ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+ 
+ 
+#memberoptions li:last-child {
+  border: none;
+}
+ 
+#memberoptions li a {
+  text-decoration: none;
+  color: #000;
+  display: block;
+  width: 190px;
+ 
+  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
+  transition: font-size 0.3s ease, background-color 0.3s ease;
+}
+ 
+#memberoptions li a:hover {
+  font-size: 20px;
+  color: white;
+  background: #500000;
+}
+
+#memberdata{
+   float:left;
+   width:100%;
+   overflow:hidden;
+   position:relative;
+   left:250px;
+}
+#runnerdata ul li a{
+   color:#000;
+   
+}
+#runnerdata div {
+  width: 20px;
+}
+
+ 
+#runnerdata ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+ 
+#runnerdata li:last-child {
+  border: none;
+}
+ 
+#runnerdata li a {
+  text-decoration: none;
+  color: #000;
+  display: block;
+  width: 250px;
+ 
+  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
+  transition: font-size 0.3s ease, background-color 0.3s ease;
+}
+ 
+#runnerdata li a:hover {
+  font-size: 20px;
+  color: white;
+  background: #500000;
+}
+
+
