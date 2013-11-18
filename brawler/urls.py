@@ -7,6 +7,8 @@ urlpatterns = patterns('',
     # ex: /groups/
     url(r'^$', views.index, name='index'),
     url(r'^login/$', views.login, name='login'),
+    url(r'^login/verification$', views.login_verification, name='login_verification'),
+    url(r'^logout$', views.logout, name='logout'),
     url(r'^about/$', views.about, name='about'),
     url(r'^brawl/$', views.brawl, name='brawl'),
     url(r'^brawl/results$', views.brawl_results, name='brawl_results'),

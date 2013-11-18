@@ -17,14 +17,7 @@
 </div>
 <br>
 <ul class="nav">
-  <li><a href="/login">Login</a></li>
-  <!--
-  {% if has_registered %}
-  <li><a href="../register">Pay</a></li>
-    {% else %}
-  <li><a href="../register">Register</a></li>
-    {% endif %}
-  -->
+  <li><a href="/logout">Logout</a></li>
   <li><a href="/about">About</a></li>
   <li><a href="/brawl">Brawl</a></li>
 </ul>
@@ -34,24 +27,42 @@
 
 <!--BEGIN body-->
 <h1 align = "center"> Brawl </h1>
+<div align="center">
+  <table>
+    <colgroup>
+      <col style="width: 40%" />
+      <col style="width: 20%" />
+      <col style="width: 40%" />
+    </colgroup>
+    <form action="" method="post"
+      {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}> {%csrf_token %}
+      {{ form.non_field_errors }}
+      <tr>
+        <td align = center>
+          <div class="fieldWrapper">
+            {{ form.opponent1.errors }}
+            <label for="opponent1"><b>Opponent 1</b> <br></label>
+            {{ form.opponent1 }}
+          </div>
+        </td>
+        <td align = center>
+          <h1> VS </h1>
+        </td>
+        <td align = center>
+          <div class="fieldWrapper">
+            {{ form.opponent2.errors }}
+            <label for="opponent2"><b>Opponent 2</b><br></label>
+            {{ form.opponent2 }}
+          </div>
+        <td>
+      </tr>
+   
+  </table>
 
-<form action="" method="post"
-  {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}> {%csrf_token %}
-  {{ form.non_field_errors }}
-    <div class="fieldWrapper">
-      {{ form.opponent1.errors }}
-      <label for="opponent1"><b>Opponent 1</b> <br></label>
-      {{ form.opponent1 }}
-  </div>
-    <div class="fieldWrapper">
-      {{ form.opponent2.errors }}
-      <label for="opponent2"><b>Opponent 2</b><br></label>
-      {{ form.opponent2 }}
-  </div>
-<input type="submit" value="Submit" />
-
-
-</form>
+  <br><br><br>
+  <input type="submit" value="Brawl!" />
+   </form>
+</div>
 
 
 <!--BEGIN footer-->

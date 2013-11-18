@@ -3,7 +3,7 @@
 <html>
 {% load staticfiles %}
 <head>
-  <title>TwitterBrawl - Login</title>
+  <title>TwitterBrawl - Logout</title>
   <link  rel="stylesheet" type="text/css" href="{% static 'brawler/style.css' %}" />
 </head>
 
@@ -17,39 +17,20 @@
 </div>
 <br>
 <ul class="nav">
-  {% if logged_in %}
-  <li><a href="/login">Logout</a></li>
-  {% else %}
   <li><a href="/login">Login</a></li>
-  {% endif %}
-  <!--
-  {% if has_registered %}
-  <li><a href="../register">Pay</a></li>
-    {% else %}
-  <li><a href="../register">Register</a></li>
-    {% endif %}
-  -->
   <li><a href="/about">About</a></li>
    {% if logged_in %}
   <li><a href="/brawl">Brawl</a></li>
-  {% endif %}
+   {% endif %}
 </ul>
 
 <hr class="horizontal">
 <!--END header-->
 
 <!--BEGIN body-->
-<h1 align = "center"> Login </h1>
+<h1 align = "center"> Logout </h1>
 <div align="center">
-<form action="" method="post"
-  {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}> {%csrf_token %}
-  {{ form.non_field_errors }}
-    <div class="fieldWrapper">
-      {{ form.username.errors }}
-      <label for="username"><b>User Name</b> <br></label>
-      {{ form.username }}
-  </div>
-<input type="submit" value="Login" />
+You have been logged out.
 
 
 </form>

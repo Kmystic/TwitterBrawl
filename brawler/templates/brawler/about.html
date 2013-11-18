@@ -17,16 +17,16 @@
 </div>
 <br>
 <ul class="nav">
+  {% if logged_in %}
+  <li><a href="/logout">Logout</a></li>
+  {% else %}
   <li><a href="/login">Login</a></li>
-  <!--
-  {% if has_registered %}
-  <li><a href="../register">Pay</a></li>
-    {% else %}
-  <li><a href="../register">Register</a></li>
-    {% endif %}
-  -->
+  {% endif %}
   <li><a href="/about">About</a></li>
+  {% if logged_in %}
   <li><a href="/brawl">Brawl</a></li>
+  {% endif %}
+  
 </ul>
 
 <hr class="horizontal">

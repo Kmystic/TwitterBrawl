@@ -17,14 +17,12 @@
 </div>
 <br>
 <ul class="nav">
+  {% if logged_in %}
+  <li><a href="/logout">Logout</a></li>
+  {% else %}
   <li><a href="/login">Login</a></li>
-  <!--
-  {% if has_registered %}
-  <li><a href="../register">Pay</a></li>
-    {% else %}
-  <li><a href="../register">Register</a></li>
-    {% endif %}
-  -->
+  {% endif %}
+
   <li><a href="/about">About</a></li>
   <li><a href="/brawl">Brawl</a></li>
 </ul>
@@ -37,11 +35,8 @@
 <b>Opponent 1 Choice: </b>
   {{opponent1}}
 <b>Opponent 2 Choice: </b>
-
   {{opponent2}}
 
-
-</form>
 
 
 <!--BEGIN footer-->
