@@ -31,10 +31,12 @@ class TwitterBrawl():
 		parameters:
 			database - store tweets information
 		"""
+		#stores all docs of tweets minus stop words
+		self.mytweets = []
 		# used to store inverted index information for all terms/tokens
 		self.inverted_index = {}
 		# store all terms/tokens in our documents as keys, values being their raw df 
-		self.word_list = {}
+		self.word_list = []
 		# store (inverse) weighted document frequencies 
 		self.idfs = {}
 		# used to store the frequency of terms within documents (tf)
@@ -43,17 +45,20 @@ class TwitterBrawl():
 		self.tf_idf = {}
 
 	def _term_tf_idf(self, token, count):
-		"""
-		purpose: Calculate tf-idf for a token in the document
-		parameters:
-			token - 
-			count - the number of occurrence of a term/token in one document in logarithmic terms
-		return: term/token's tf-idf
-		"""
-		#Return the tf-idf
-		return count * self.idfs[token] 
+        #"""
+        #purpose: Calculate tf-idf for a token in the document
+        #parameters:
+        #    token -  
+        #    count - the number of occurrence of a term/token in one document
+        #return: term/token's tf-idf
+        #"""        
+		idf = self.idfs.get(token)
+		tf = 0
+		if count > 0:
+			tf = 1 + math.log(count, 2)
+		return (tf*idf)
 		
-	def CosineSim(self, vec_query, vec_doc):
+	def bestCosineSim(self):
 		"""
 		purpose: Calculate cosine similarity for two documents (vectors, represented as dictionaries)
 		parameters:
@@ -61,32 +66,74 @@ class TwitterBrawl():
 			vec_doc   - the vector (dictionary) of tf-idf for a document
 		return: cosine similarity between the query and a document
 		"""
-		#Stores dot product of two vectors
-		dot_product = 0.0
-		#Stores the magnitude of query vector (without sqrt)
-		query_magnitude = 0.0
-		#Stores the magnitude of doc vector (without sqrt)
-		doc_magnitude = 0.0
-		#Stores product of magnitudes
-		magnitude_product = 0.0
 		
-		# Calculate dot product
-		for token in vec_query:
-			if token in vec_doc:
-				dot_product += vec_query[token] * vec_doc[token]
+		#cos sim between user and friend1
+		query_mag = 0
+		doc_mag = 0
+		dot_product = 0
+		for i in range(0, len(self.tf_idf[0])):
+			query_mag += self.tf_idf[0][i]**2
+			doc_mag += self.tf_idf[1][i]**2
+			dot_product += (self.tf_idf[0][i]*self.tf_idf[1][i])
+		mag = math.sqrt(query_mag*doc_mag)
+		uf1 = (dot_product/mag)
+		
+		#cos sim between user and friend2
+		query_mag = 0
+		doc_mag = 0
+		dot_product = 0
+		for i in range(0, len(self.tf_idf[0])):
+			query_mag += self.tf_idf[0][i]**2
+			doc_mag += self.tf_idf[2][i]**2
+			dot_product += (self.tf_idf[0][i]*self.tf_idf[2][i])
+		mag = math.sqrt(query_mag*doc_mag)
+		uf2 = (dot_product/mag)
+		
+		#return max (incase you couldn't tell.......) 
+		if max(uf1,uf2) == uf1:
+			return 1
+		else:
+			return 2
 
-		# Calculate magnitude product
-		for token in vec_query:
-			query_magnitude += math.pow(vec_query[token],2)
-		for token in vec_doc:
-			doc_magnitude += math.pow(vec_doc[token],2)
-		magnitude_product += math.sqrt(query_magnitude) * math.sqrt(doc_magnitude)
-
-		# Return cosine simularity
-		return dot_product/magnitude_product
-
-
-	def index_tweets(self,tweets):
+	def index_tweets(self,user,friend1,friend2):
+		tweets = []
+		tweets.append(user.user_text) #index 0 = user
+		tweets.append(friend1.user_text) #index 1 = friend1
+		tweets.append(friend2.user_text) #index 2 = friend2
+				
+		for i in range(0,len(tweets)): #for each doc of tweets from a user
+			self.tf_idf[i] = [] #tf-idf vector is an empty list/vector
+			temp = [item for item in tokenize(tweets[i])] #creates a list of every non-stop word in the tweet
+			
+			#TO DO: FIGURE OUT HASHTAGS
+			
+			for word in temp: #for every nonstop word in the doc
+				if word in self.inverted_index: #we have seen this word before
+					self.inverted_index[word].append(i)
+					self.term_freq[word][i] += 1
+				else: #we have never seen this word before!
+					self.inverted_index[word] = [i] #add word to Inv Ind, reference to doc id
+					self.word_list.append(word) #add word to word list
+					self.term_freq[word] = [0,0,0] #start an empty list for term freq of that word
+					self.term_freq[word][i] += 1
+					self.idfs[word] = [] #empty list for the word
+			doc = dict(tokens=list(temp), tweet=tweets[i])
+			self.mytweets.append(doc)
+			
+		for word in self.word_list:
+			df = len(set(self.inverted_index[word])) #document freq for a word "at most 3"
+			self.idfs[word] = math.log((len(self.mytweets))/df,2) #computing the idf for each word
+			for doc in self.tf_idf: #create each user's tf_idf vector populated with 0s
+				self.tf_idf.get(doc).append(0)
+		
+		#populate each user's tfidf vector with raw TFs for each word
+		for word in range(0,len(self.word_list)): #for every word
+			for doc in range(0,len(self.tf_idf)): #in each documents of tweets...
+				raw_tf = self.term_freq[self.word_list[word]][doc] 
+				self.tf_idf[doc][word] = self._term_tf_idf(self.word_list[word],raw_tf) #calculate the tfidf score 
+			
+		
+		'''
 		"""
 		purpose: process raw tweets and calculate pagerank of users in tweets
 		parameters:
@@ -137,33 +184,27 @@ class TwitterBrawl():
 			for token in self.term_freq[doc_id]:
 				tf_idf_dict[token] = self._term_tf_idf(token, self.term_freq[doc_id][token])
 			self.tf_idf[doc_id] = tf_idf_dict
+		'''
 
-
-
-
-
-
-
-
-
-
-'''
+#'''
 def main():
 	mainUser = twitterUsers.TwitterUser()
 	mainUser.get_information("kmystic524")
-	#user1 = twitterUsers.TwitterUser()
-	#user1.get_information("katyperry")
-	#user2 = twitterUsers.TwitterUser()
-	#user2.get_information("TheRealCaverlee")
-	tweets = []
-	print mainUser.user_text
-	tweets.append(mainUser.user_text)
-	#tweets.append(user1.user_text)
-	#tweets.append(user2.user_text)
+	mainUser.get_friends()
+	#print mainUser.user_text
+	#return
+	user1 = twitterUsers.TwitterUser()
+	user1.get_information("katyperry")
+	user2 = twitterUsers.TwitterUser()
+	user2.get_information("TheRealCaverlee")
 	tb = TwitterBrawl()
-	tb.index_tweets(tweets)
+	tb.index_tweets(mainUser,user1,user2)
+	if tb.bestCosineSim() == 1:
+		print "You're best friends with " + user1.user_name + "!"
+	else:
+		print "You're best friends with " + user2.user_name + "!"
 
 if __name__ == "__main__":
 	main()
 
-'''
+#'''

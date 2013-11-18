@@ -18,8 +18,11 @@ class TwitterUser():
 		for tweet in self.user_tweets:
 			self.user_tweet_texts.append(tweet.__getstate__()['text'].encode('ascii','ignore'))	
 		for tweet in self.user_tweet_texts:
-			self.user_text = self.user_text + tweet
-		self.user_friends = tc.get_friends(user_id)
+			self.user_text = self.user_text + " " + tweet
+	
+	def get_friends(self):	
+		tc = twitterCalls.TwitterCaller()
+		self.user_friends = tc.get_friends(self.user_name)
 
 '''
 def main():
