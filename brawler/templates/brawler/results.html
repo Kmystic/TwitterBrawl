@@ -32,12 +32,32 @@
 
 <!--BEGIN body-->
 <h1 align = "center"> Brawl Results</h1>
-<b>Opponent 1 Choice: </b>
-  {{opponent1}}
-<b>Opponent 2 Choice: </b>
-  {{opponent2}}
+<div align="center">
+  <table>
+    <colgroup>
+      <col style="width: 40%" />
+      <col style="width: 20%" />
+      <col style="width: 40%" />
+    </colgroup>
+    <td align = "center">
+      <h2>{{opponent1}}</h2>
+      <img src="../../static/brawler/media/{{opponent1}}.jpg" title="{{opponent1}}"padding:5px; width="50%" height="auto"/ >
+    </td>
 
+    <td align = center>
+        <h1> VS </h1>
+    </td>
+    <td align = center>
+        <h2> {{opponent2}} </h2>
+        <img src="../../static/brawler/media/{{opponent2}}.jpg" title="{{opponent2}}"padding:5px; width="50%" height="auto"/>
+    </td>
 
+</table>
+
+<h1> Winner is {{winner}}! </h2>
+<img src="../../static/brawler/media/{{opponent2}}.jpg" title="{{opponent2}}"padding:5px; width="20%" height="auto" />
+
+</div>
 
 <!--BEGIN footer-->
 <hr class="horizontal">

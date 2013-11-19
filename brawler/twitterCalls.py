@@ -43,7 +43,7 @@ class TwitterCaller():
 	# Get user's friends (i.e. the people they follow)
 	def get_friends(self, user_id):
 		#friend_ids = self.api.friends_ids(user_id)
-		friends = self.api.friends(user_id, count = 10)
+		friends = self.api.friends(user_id, count = 15)
 		friend_screens = []
 		for friend in friends:
 			friend_screens.append(friend.screen_name)
@@ -58,6 +58,12 @@ class TwitterCaller():
 
 		return tweets[:count]
 
+	def get_photo(self, user_id):
+		try:
+			user_profile = self.api.get_user(user_id)
+		except:
+			return None
+		return user_profile.profile_image_url
 	
 
 
@@ -67,32 +73,26 @@ class TwitterCaller():
 '''
 def main():
 
-	user_name = "JNowotny"
+	user_name = "kmystic524"
 	#user_name = raw_input("Enter the screen name of the user: ")
-	tc = TwitterCrawler()
+	tc = TwitterCaller()
 	#tc.check_api_rate_limit(900)
 	user = tc.get_user_profile(user_name)
 	print " "
 	print "User's real name:"
 	print user.name
 	#print 
-	tweets = tc.get_user_tweets(user_name, 100)
+	#tweets = tc.get_user_tweets(user_name, 100)
 	print " "
-	print "The users last 10 tweets:"
-	for tweet in tweets:
-		print tweet.__getstate__()['text'].encode('ascii','ignore')
-	print tc.api.rate_limit_status()
-	#tc.CreateJSON(user, tweets)
-	
-	friends = tc.get_friends(user_name)
-	print " "
-	print "The pepople the user follows:"
-	for friend in friends:
-			print friend
-	
+	profilePhotoURL = tc.get_photo(user_name)
+	photoName = "static/brawler/media/" + str(user_name) + ".jpg"
+	file = str(photoName)
+	f = open(file,'wb')
+	f.write(urllib.urlopen(profilePhotoURL).read())
+	f.close()
 	
 
 if __name__ == "__main__":
 	main()
-
 '''
+

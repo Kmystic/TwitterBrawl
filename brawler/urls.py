@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^logout$', views.logout, name='logout'),
     url(r'^about/$', views.about, name='about'),
     url(r'^brawl/$', views.brawl, name='brawl'),
+    url(r'^brawl/function$', views.brawl_function, name='brawl_function'),
     url(r'^brawl/results$', views.brawl_results, name='brawl_results'),
     # ex: /groups/main
 	#url(r'^main/$', views.main, name='main'),

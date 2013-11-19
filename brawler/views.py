@@ -11,10 +11,14 @@ from django import forms
 from django.forms.widgets import *
 from django.core.mail import send_mail, BadHeaderError
 from django.core.mail import EmailMessage
-import twitterUsers
+
 # Form includes
 from django import forms
 from django.db import models
+import urllib
+import twitterUsers
+import twitterCalls
+import twitterBrawl
 
 
 
@@ -32,12 +36,12 @@ global isLogged
 # Form to pick the two opponents
 
 class BrawlForm(forms.Form):
-    def __init__(self, choices, *args, **kwargs):
-        super(BrawlForm, self).__init__(*args,**kwargs)
+    def __init__(self, choices, *args):
+        super(BrawlForm, self).__init__(*args)
         #super(BrawlForm, self).__init__(*args,**kwargs)
+        #print choices
         self.fields["opponent1"] = forms.ChoiceField(choices=choices, required = True)
         self.fields["opponent2"] = forms.ChoiceField(choices=choices, required = True)
-        print OPPONENT_CHOICES
     #opponent1 = forms.ChoiceField(choices = OPPONENT_CHOICES, required=True)
     #opponent2 = forms.ChoiceField(choices = OPPONENT_CHOICES, required=True)
 
@@ -49,9 +53,11 @@ class LoginForm(forms.Form):
 def getUser(username):
     global tb
     tb.get_information(username)
+    tb.get_friends(username)
     global OPPONENT_CHOICES
-    for i, friend_id in enumerate (tb.user_friends):
-        OPPONENT_CHOICES.append((i,friend_id))
+    for friend_id in (tb.user_friends):
+        OPPONENT_CHOICES.append(friend_id)
+        
 
 def isLoggedIn():
     return isLogged
@@ -101,30 +107,86 @@ def about(request):
     return render_to_response('brawler/about.html', context)
 
 def brawl(request):
+    '''
     global OPPONENT_CHOICES
     form = BrawlForm(OPPONENT_CHOICES)
     if request.method == 'POST': #If form has been sumbitted
         #print OPPONENT_CHOICES
+        global OPPONENT_CHOICES
         form = BrawlForm(request.POST, request.FILES, OPPONENT_CHOICES)
         if form.is_valid():
             global opponent_1
-            opponent_1 = form.cleaned_data['opponent1']
-            print opponent_1
+            opponent_1 = form.cleaned_data["opponent1"]
             global opponent_2
-            opponent_2 = form.cleaned_data['opponent2']
-            context = {'opponent1' : opponent_1, 'opponent2' : opponent_2, 'logged_in':isLoggedIn()}
+            opponent_2 = form.cleaned_data["opponent2"]
+            context = {'logged_in':isLoggedIn()}
             return render(request, 'brawler/results.html', context) # Redirect after POST 
+        print'here!'
     else:
+        #print OPPONENT_CHOICES
         print "nothing"
         #form = BrawlForm(initial={'gender':me.gender,'name':me.name,'birth_date':me.birthday, 'email':me.email})
-        #form = BrawlForm(initial={'opponent1' : OPPONENT_CHOICES, 'opponent2' :  OPPONENT_CHOICES})
-    return render(request, 'brawler/brawl.html', {
-        'form':form
-    })
+        return render(request, 'brawler/brawl.html', {
+        'form':form 
+        })
+    return render(request, 'brawler/brawl.html', 0)
+    #print OPPONENT_CHOICES
+    '''
+    global OPPONENT_CHOICES
+    context = {'opponents1': OPPONENT_CHOICES, 'opponents2' : OPPONENT_CHOICES}
+    return render(request, 'brawler/brawl.html', context)
+
+def brawl_function(request):
+    global opponent_1
+    global opponent_2
+   
+   # try:
+        
+    opponent_1 = request.POST['opponent1'] 
+    opponent_2 = request.POST['opponent2']
+    #except:
+     #   opponent_1 = None    
+      #  opponent_2 = None
+
+    global tb
+    main_user = tb
+
+    opp1 = twitterUsers.TwitterUser()
+    opp1.get_information(opponent_1)
+    profilePhotoURL = opp1.get_photo(opponent_1)
+    photoName = "brawler/static/brawler/media/" + str(opponent_1) + ".jpg"
+    file = str(photoName)
+    f = open(file,'wb')
+    f.write(urllib.urlopen(profilePhotoURL).read())
+
+    opp2 = twitterUsers.TwitterUser()
+    opp2.get_information(opponent_2)
+    profilePhotoURL = opp2.get_photo(opponent_2)
+    photoName = "brawler/static/brawler/media/" + str(opponent_2) + ".jpg"
+    file = str(photoName)
+    f = open(file,'wb')
+    f.write(urllib.urlopen(profilePhotoURL).read())
+
+    twitBrawl = twitterBrawl.TwitterBrawl()
+    twitBrawl.index_tweets(main_user, opp1, opp2)
+
+    win = ""
+    if twitBrawl.bestCosineSim() == 1:
+        print "You're best friends with " + opponent_1 + "!"
+        win = opponent_1
+    else:
+        print "You're best friends with " + opponent_2 + "!"
+        win = opponent_2
+
+    print win
+
+
+    context = {'logged_in':isLogged,'opponent1' : opponent_1, 'opponent2':opponent_2, 'winner': win}
+    return render(request, 'brawler/results.html', context)
 
 def brawl_results(request):
-    context = {'opponent1' : opponent_1, 'opponent2' : opponent_2, 'logged_in':isLogged}
-    print opponent_1
+    
+
     #print opponent_2
     return render(request,'brawler/results.html', context)
 

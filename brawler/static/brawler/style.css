@@ -45,28 +45,7 @@ div.maincontent {
 	padding: 70px;
 }
 
-div.fbfeed {
-	float: right;
-}
 
-iframe.registration {
-	width:700px;
-	height:2225px;
-}
-
-#memberoptions{
-   float:left;
-   width:100%;
-   overflow:hidden;
-   position:relative;
-}
-#memberoptions ul li a{
-   color:#000;
-   
-}
-#memberoptions div {
-  width: 20px;
-}
 h1 {
 	color:  #1bb2e9;
   font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", sans-serif;;
@@ -78,80 +57,21 @@ h2 {
   font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", sans-serif;;
 }
  
-#memberoptions ul {
-  list-style-type: none;
+
+ul.opplist {
+  position: relative;
+  width: 230px;
+  height: 200px;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  list-style: none;
+ 
+  -webkit-perspective: 400px;
+     -moz-perspective: 400px;
+      -ms-perspective: 400px;
+       -o-perspective: 400px;
+          perspective: 400px;
 }
  
- 
-#memberoptions li:last-child {
-  border: none;
-}
- 
-#memberoptions li a {
-  text-decoration: none;
-  color: #000;
-  display: block;
-  width: 190px;
- 
-  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
-  transition: font-size 0.3s ease, background-color 0.3s ease;
-}
- 
-#memberoptions li a:hover {
-  font-size: 20px;
-  color: white;
-  background: #500000;
-}
-
-#memberdata{
-   float:left;
-   width:100%;
-   overflow:hidden;
-   position:relative;
-   left:250px;
-}
-#runnerdata ul li a{
-   color:#000;
-   
-}
-#runnerdata div {
-  width: 20px;
-}
-
- 
-#runnerdata ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
- 
-#runnerdata li:last-child {
-  border: none;
-}
- 
-#runnerdata li a {
-  text-decoration: none;
-  color: #000;
-  display: block;
-  width: 250px;
- 
-  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
-  transition: font-size 0.3s ease, background-color 0.3s ease;
-}
- 
-#runnerdata li a:hover {
-  font-size: 20px;
-  color: white;
-  background: #500000;
-}
-
-
