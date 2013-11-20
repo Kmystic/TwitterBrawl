@@ -76,7 +76,9 @@ class TwitterBrawl():
 			doc_mag += self.tf_idf[1][i]**2
 			dot_product += (self.tf_idf[0][i]*self.tf_idf[1][i])
 		mag = math.sqrt(query_mag*doc_mag)
-		uf1 = (dot_product/mag)
+		uf1 = 0
+		if (mag > 0):
+			uf1 = (dot_product/mag)
 		
 		#cos sim between user and friend2
 		query_mag = 0
@@ -87,19 +89,23 @@ class TwitterBrawl():
 			doc_mag += self.tf_idf[2][i]**2
 			dot_product += (self.tf_idf[0][i]*self.tf_idf[2][i])
 		mag = math.sqrt(query_mag*doc_mag)
-		uf2 = (dot_product/mag)
+		uf2 = 0
+		if (mag > 0):
+			uf2 = (dot_product/mag)
 		
 		#return max (incase you couldn't tell.......) 
-		if max(uf1,uf2) == uf1:
-			return 1
-		else:
-			return 2
+		#if max(uf1,uf2) == uf1:
+		#	return 1
+		#else:
+		#	return 2
+		
+		return [uf1,uf2] #return the scores
 
-	def index_tweets(self,user,friend1,friend2):
+	def index(self,user,friend1,friend2):
 		tweets = []
-		tweets.append(user.user_text) #index 0 = user
-		tweets.append(friend1.user_text) #index 1 = friend1
-		tweets.append(friend2.user_text) #index 2 = friend2
+		tweets.append(user) #index 0 = user
+		tweets.append(friend1) #index 1 = friend1
+		tweets.append(friend2) #index 2 = friend2
 				
 		for i in range(0,len(tweets)): #for each doc of tweets from a user
 			self.tf_idf[i] = [] #tf-idf vector is an empty list/vector
@@ -189,17 +195,26 @@ class TwitterBrawl():
 #'''
 def main():
 	mainUser = twitterUsers.TwitterUser()
-	mainUser.get_information("kmystic524")
+	mainUser.get_information("jnowotny")
 	mainUser.get_friends()
 	#print mainUser.user_text
 	#return
 	user1 = twitterUsers.TwitterUser()
-	user1.get_information("katyperry")
+	user1.get_information("deandrejordan")
 	user2 = twitterUsers.TwitterUser()
-	user2.get_information("TheRealCaverlee")
-	tb = TwitterBrawl()
-	tb.index_tweets(mainUser,user1,user2)
-	if tb.bestCosineSim() == 1:
+	user2.get_information("jmanziel2")
+	tb_tweets = TwitterBrawl()
+	tb_hashtags = TwitterBrawl()
+	tb_tweets.index(mainUser.user_text, user1.user_text, user2.user_text)
+	tb_hashtags.index(mainUser.user_hashtags, user1.user_hashtags, user2.user_hashtags)
+	
+	hashtag_scores = tb_hashtags.bestCosineSim()
+	tweet_scores = tb_tweets.bestCosineSim()
+	
+	f1_score = .6*hashtag_scores[0] + .4*tweet_scores[0]
+	f2_score = .6*hashtag_scores[1] + .4*tweet_scores[1]
+	
+	if max(f1_score,f2_score) == f1_score:
 		print "You're best friends with " + user1.user_name + "!"
 	else:
 		print "You're best friends with " + user2.user_name + "!"
