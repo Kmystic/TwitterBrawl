@@ -1,6 +1,10 @@
 import tweepy
 import json
 import sys
+'''
+This class handles the Twitter API calls for TwitterBrawl
+
+'''
 
 class TwitterCaller():
 	def __init__(self):
@@ -13,27 +17,27 @@ class TwitterCaller():
 		self.api = tweepy.API(self.auth)
 		self.num_docs = 0
 		self.num_tweets = 0
-		#print self.api.rate_limit_status()
 
+
+	#Checks API rate limit, code from Dr. Caverlee's example
 	def check_api_rate_limit(self, sleep_time):
 		try:
 			rate_limit_status = self.api.rate_limit_status()
 		except Exception as error_message:
 			if error_message['code'] == 88:
-				#print "Sleeping for %d seconds." %(sleep_time)
-				#print rate_limit_status['resources']['statuses']
+				print "Sleeping for %d seconds." %(sleep_time)
+				print rate_limit_status['resources']['statuses']
 				time.sleep(sleep_time)
 
 			while rate_limit_status['resources']['statuses']['/statuses/user_timeline']['remaining'] < 10:
-				#print "Sleeping for %d seconds." %(sleep_time)
-				#print rate_limit_status['resources']['statuses']
+				print "Sleeping for %d seconds." %(sleep_time)
+				print rate_limit_status['resources']['statuses']
 				time.sleep(sleep_time)
 				rate_limit_status = self.api.rate_limit_status()
-			#print rate_limit_status['resources']['statuses']['/statuses/user_timeline']
+			
 
 	# Get user profile
 	def get_user_profile(self, user_id):
-		#self.check_api_rate_limit(900)
 		try:
 			user_profile = self.api.get_user(user_id)
 		except:
@@ -42,15 +46,14 @@ class TwitterCaller():
 
 	# Get user's friends (i.e. the people they follow)
 	def get_friends(self, user_id):
-		#friend_ids = self.api.friends_ids(user_id)
 		friends = self.api.friends(user_id, count = 15)
 		friend_screens = []
 		for friend in friends:
 			friend_screens.append(friend.screen_name)
 		return friend_screens;
 
+	# Get user's count number of tweets
 	def get_user_tweets(self, user_id, count):
-		#self.check_api_rate_limit(900)
 		try:
 			tweets = self.api.user_timeline(user_id, count = count, include_rts=0)
 		except:
@@ -58,6 +61,7 @@ class TwitterCaller():
 
 		return tweets[:count]
 
+	# Get user's profile photo
 	def get_photo(self, user_id):
 		try:
 			user_profile = self.api.get_user(user_id)
@@ -66,9 +70,6 @@ class TwitterCaller():
 		return user_profile.profile_image_url
 	
 
-
-	#def CreateJSON(self, user, tweets):
-		#print user.get_user()
 	
 '''
 def main():
