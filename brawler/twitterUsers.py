@@ -22,7 +22,7 @@ class TwitterUser():
                 user = tc.get_user_profile(user_id)
                 self.user_name = user.name
                 self.user_id = user_id
-                self.user_tweets = tc.get_user_tweets(user_id, 10)
+                self.user_tweets = tc.get_user_tweets(user_id, 200)
                 for tweet in self.user_tweets:
                         self.user_tweet_texts.append(tweet.__getstate__()['text'].encode('ascii','ignore'))        
                 for tweet in self.user_tweet_texts:

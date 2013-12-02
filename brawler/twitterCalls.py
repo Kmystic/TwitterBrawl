@@ -46,7 +46,7 @@ class TwitterCaller():
 
 	# Get user's friends (i.e. the people they follow)
 	def get_friends(self, user_id):
-		friends = self.api.friends(user_id, count = 15)
+		friends = self.api.friends(user_id, count = 250)
 		friend_screens = []
 		for friend in friends:
 			friend_screens.append(friend.screen_name)

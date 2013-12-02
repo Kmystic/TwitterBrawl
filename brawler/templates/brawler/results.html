@@ -42,6 +42,27 @@
     <td align = "center">
       <h2>{{opponent1}}</h2>
       <img src="../../static/brawler/media/{{opponent1}}.jpg" title="{{opponent1}}"padding:5px; width="50%" height="auto"/ >
+      <br>
+      <p align = "left">
+        <!--
+      <b>Most Similar Hashtags:</b>
+      
+      {% for word in top_hashtags.1 %}
+          <br>{{word}}
+      {%endfor%}
+      -->
+      <br>
+      <b>Hashtag Text Cosine Simularity:</b> {{hashtag.0}}
+      <br>
+      <b>Tweet Text Cosine Simularity:</b> {{tweet.0}}
+      <br>
+      <!--
+      <b>Most Similar Tweet Text:</b>
+      {% for word in top_tweets.1 %}
+          <br>{{word}}
+      {%endfor%}
+    -->
+      </p>
     </td>
 
     <td align = center>
@@ -50,6 +71,25 @@
     <td align = center>
         <h2> {{opponent2}} </h2>
         <img src="../../static/brawler/media/{{opponent2}}.jpg" title="{{opponent2}}"padding:5px; width="50%" height="auto"/>
+        <p align = "left">
+        <br>
+        <!--
+        <b>Most Similar Hashtags:</b>
+        {% for word in top_hashtags.2 %}
+            <br>{{word}}
+        {%endfor%}
+      -->
+        <b>Hashtag Text Cosine Simularity:</b> {{hashtag.1}}
+        <br>
+        <!--
+        <b>Most Similar Tweet Text:</b>
+        <br>
+        {% for word in top_tweets.2 %}
+            <br>{{word}}
+        {%endfor%}
+      -->
+        <b>Tweet Text Cosine Simularity:</b> {{tweet.1}}
+      </p>
     </td>
 
 </table>

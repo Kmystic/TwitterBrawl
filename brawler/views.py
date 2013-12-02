@@ -107,6 +107,7 @@ def about(request):
 # View for brawl.html
 def brawl(request):
     global OPPONENT_CHOICES
+    OPPONENT_CHOICES= sorted(OPPONENT_CHOICES)
     context = {'opponents1': OPPONENT_CHOICES, 'opponents2' : OPPONENT_CHOICES}
     return render(request, 'brawler/brawl.html', context)
 
@@ -148,7 +149,7 @@ def brawl_function(request):
     tweet_scores = twitter_tweets.bestCosineSim()
 
     op1_score = .6*hashtag_scores[0] + .4*tweet_scores[0]
-    op2_score = .6*hashtag_scores[0] + .4*tweet_scores[0]
+    op2_score = .6*hashtag_scores[1] + .4*tweet_scores[1]
 
 
     win = ""
@@ -161,8 +162,20 @@ def brawl_function(request):
         win = opponent_2
 
     print win
-
-    context = {'logged_in':isLogged,'opponent1' : opponent_1, 'opponent2':opponent_2, 'winner': win}
+    top_hash = {}
+    top_hash[1] = [x[0] for x in twitter_hashtags.top_5[1]]
+    top_hash[2] = [x[0] for x in twitter_hashtags.top_5[2]]
+    top_tweet = {}
+    top_tweet[1] = [x[0] for x in  twitter_tweets.top_5[1]] 
+    top_tweet[2] = [x[0] for x in  twitter_tweets.top_5[2]] 
+    context = {'logged_in':isLogged,
+            'opponent1' : opponent_1, 
+            'opponent2':opponent_2, 
+            'winner': win, 
+            'hashtag' :hashtag_scores, 
+            'tweet' : tweet_scores,
+            'top_hashtags' : top_hash,
+            'top_tweets' : top_tweet}
     return render(request, 'brawler/results.html', context)
 
 # View for results.html

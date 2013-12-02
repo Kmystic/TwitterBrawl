@@ -47,6 +47,7 @@ class TwitterBrawl():
             self.term_freq = {}
             # used to store the tf-idf value of documents
             self.tf_idf = {}
+            self.top_5 = {}
 
         def _term_tf_idf(self, token, count):
             #"""
@@ -75,10 +76,10 @@ class TwitterBrawl():
             query_mag = 0
             doc_mag = 0
             dot_product = 0
-            for i in range(0, len(self.tf_idf[0])):
-                    query_mag += self.tf_idf[0][i]**2
-                    doc_mag += self.tf_idf[1][i]**2
-                    dot_product += (self.tf_idf[0][i]*self.tf_idf[1][i])
+            for word in self.tf_idf[0]:
+                    query_mag += self.tf_idf[0][word]**2
+                    doc_mag += self.tf_idf[1][word]**2
+                    dot_product += (self.tf_idf[0][word]*self.tf_idf[1][word])
             mag = math.sqrt(query_mag*doc_mag)
             uf1 = 0
             if (mag > 0):
@@ -88,10 +89,10 @@ class TwitterBrawl():
             query_mag = 0
             doc_mag = 0
             dot_product = 0
-            for i in range(0, len(self.tf_idf[0])):
-                    query_mag += self.tf_idf[0][i]**2
-                    doc_mag += self.tf_idf[2][i]**2
-                    dot_product += (self.tf_idf[0][i]*self.tf_idf[2][i])
+            for word in self.tf_idf[0]:
+                    query_mag += self.tf_idf[0][word]**2
+                    doc_mag += self.tf_idf[2][word]**2
+                    dot_product += (self.tf_idf[0][word]*self.tf_idf[2][word])
             mag = math.sqrt(query_mag*doc_mag)
             uf2 = 0
             if (mag > 0):
@@ -138,11 +139,36 @@ class TwitterBrawl():
                             self.tf_idf.get(doc).append(0)
             
             #populate each user's tfidf vector with raw TFs for each word
-            for word in range(0,len(self.word_list)): #for every word
-                    for doc in range(0,len(self.tf_idf)): #in each documents of tweets...
-                            raw_tf = self.term_freq[self.word_list[word]][doc] 
-                            self.tf_idf[doc][word] = self._term_tf_idf(self.word_list[word],raw_tf) #calculate the tfidf score 
-                    
+            for doc in range(0,len(self.tf_idf)): #in each documents of tweets...
+                tf_idf = {}
+                for word in range(0,len(self.word_list)): #for every word
+                    raw_tf = self.term_freq[self.word_list[word]][doc]
+                    tf_idf[self.word_list[word]] = self._term_tf_idf(self.word_list[word],raw_tf) #calculate the tfidf score]
+                self.tf_idf[doc] = tf_idf
+
+
+                            #print word 
+            #print self.tf_idf[0]['a']
+            #determine highest scores
+            comparison_scores = {}
+            for doc in range(1,len(self.tf_idf)): #in each documents of tweets...
+                for word in self.tf_idf[doc].keys(): #for every word
+                    if (self.tf_idf[doc][word] != 0 or self.tf_idf[0][word] != 0):
+                        comparison_scores[word] = abs(self.tf_idf[doc][word] - self.tf_idf[0][word])
+                    else:
+                        comparison_scores[word] = 100
+                self.top_5[doc] = comparison_scores
+
+            #print comparison_scores
+            for doc in range(1,len(self.top_5)):
+                print doc
+                self.top_5[doc] = sorted(self.top_5[doc].items(), key = lambda i: i[1])[:5]
+                print self.top_5[doc]
+            print "dic 1"
+            print self.top_5[1]
+            print "dic 2"
+            print self.top_5[2]
+
                 
             '''
             """
@@ -212,9 +238,10 @@ def main():
         tb_hashtags = TwitterBrawl()
         tb_tweets.index(mainUser.user_text, user1.user_text, user2.user_text)
         tb_hashtags.index(mainUser.user_hashtags, user1.user_hashtags, user2.user_hashtags)
-        
         hashtag_scores = tb_hashtags.bestCosineSim()
         tweet_scores = tb_tweets.bestCosineSim()
+        
+
         
         f1_score = .6*hashtag_scores[0] + .4*tweet_scores[0]
         f2_score = .6*hashtag_scores[1] + .4*tweet_scores[1]
