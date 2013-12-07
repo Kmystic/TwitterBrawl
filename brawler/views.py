@@ -127,8 +127,8 @@ def brawl_function(request):
     opp1 = twitterUsers.TwitterUser()
     opp1.get_information(opponent_1)
     opp1.get_all_friends()
-    profilePhotoURL = opp1.get_photo()
-    photoName = "brawler/static/brawler/media/" + str(opponent_1) + ".jpg"
+    profilePhotoURL = "https://si0.twimg.com/profile_images/" + str(opp1.number_id) + "/avatar.png"
+    photoName = "brawler/static/brawler/media/" + str(opponent_1) + ".png"
     file = str(photoName)
     f = open(file,'wb')
     f.write(urllib.urlopen(profilePhotoURL).read())
@@ -136,8 +136,8 @@ def brawl_function(request):
     opp2 = twitterUsers.TwitterUser()
     opp2.get_information(opponent_2)
     opp2.get_all_friends()
-    profilePhotoURL = opp2.get_photo()
-    photoName = "brawler/static/brawler/media/" + str(opponent_2) + ".jpg"
+    profilePhotoURL = "https://si0.twimg.com/profile_images/" + str(opp2.number_id) + "/avatar.png"
+    photoName = "brawler/static/brawler/media/" + str(opponent_2) + ".png"
     file = str(photoName)
     f = open(file,'wb')
     f.write(urllib.urlopen(profilePhotoURL).read())

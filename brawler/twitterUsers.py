@@ -16,6 +16,7 @@ class TwitterUser():
                 self.friend_ids = []
                 self.user_hashtags = ""
                 self.user_id = ""
+                self.number_id = ""
 
         # Get user's name, tweets, and hashtags
         def get_information(self, user_id):
@@ -23,6 +24,7 @@ class TwitterUser():
                 user = tc.get_user_profile(user_id)
                 self.user_name = user.name
                 self.user_id = user_id
+                self.number_id = user.id
                 self.user_tweets = tc.get_user_tweets(user_id, 200)
                 for tweet in self.user_tweets:
                         self.user_tweet_texts.append(tweet.__getstate__()['text'].encode('ascii','ignore'))        
