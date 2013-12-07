@@ -13,6 +13,7 @@ class TwitterUser():
                 self.user_tweet_texts = []
                 self.user_text = ""
                 self.user_friends = []
+                self.friend_ids = []
                 self.user_hashtags = ""
                 self.user_id = ""
 
@@ -35,6 +36,10 @@ class TwitterUser():
         def get_friends(self):        
                 tc = twitterCalls.TwitterCaller()
                 self.user_friends = tc.get_friends(self.user_id)
+
+		def get_all_friends(self):
+				tc = twitterCalls.TwitterCaller()
+                self.friend_ids = tc.get_all_friends(self.user_id)
 
         # Get user's profile photo
         def get_photo(self):

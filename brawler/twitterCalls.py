@@ -51,7 +51,11 @@ class TwitterCaller():
 		for friend in friends:
 			friend_screens.append(friend.screen_name)
 		return friend_screens;
-
+	
+	def get_all_friends(self, user_id):
+		friends = self.api.friends.ids(user_id)
+		return friends
+	
 	# Get user's count number of tweets
 	def get_user_tweets(self, user_id, count):
 		try:
