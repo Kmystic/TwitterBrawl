@@ -55,7 +55,7 @@ class TwitterCaller():
 	# Get user's count number of tweets
 	def get_user_tweets(self, user_id, count):
 		try:
-			tweets = self.api.user_timeline(user_id, count = count, include_rts=0)
+			tweets = self.api.user_timeline(user_id, count = count, include_rts=1)
 		except:
 			tweets = None
 
