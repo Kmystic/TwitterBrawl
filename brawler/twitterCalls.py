@@ -46,16 +46,21 @@ class TwitterCaller():
 
 	# Get user's friends (i.e. the people they follow)
 	def get_friends(self, user_id):
-		friends = self.api.friends(user_id, count = 250)
-		friend_screens = []
+		friends = self.api.friends(user_id, count = 10)
+		return friends
+
+	'''
+	def get_all_friends(self, user_id):
+		friends = self.api.friends(user_id)
 		for friend in friends:
 			friend_screens.append(friend.screen_name)
-		return friend_screens;
+		return friends
+	'''
 
 	# Get user's count number of tweets
 	def get_user_tweets(self, user_id, count):
 		try:
-			tweets = self.api.user_timeline(user_id, count = count, include_rts=0)
+			tweets = self.api.user_timeline(user_id, count = count, include_rts=1)
 		except:
 			tweets = None
 

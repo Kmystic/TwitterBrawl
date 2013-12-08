@@ -1,7 +1,7 @@
 from __future__ import division
 from stemming import porter2
 from operator import itemgetter
-from nltk.corpus import stopwords
+import stopwords
 import tweepy
 import json
 import sys
@@ -19,12 +19,13 @@ This class handles the comparison evaluations
 
 # Tokenize the text
 def tokenize(text):
-        tokens = re.findall("[\w']+", text.lower())
-        important_words = []
-        for word in tokens:
-                if word not in stopwords.words('english'):
-                        important_words.append(word)
-        return [porter2.stem(token) for token in important_words]
+    tokens = re.findall("[\w']+", text.lower())
+    important_words = []
+            
+    for word in tokens:
+        if word not in stopwords.stopwords:
+            important_words.append(word)
+    return [porter2.stem(token) for token in important_words]
 
 
 class TwitterBrawl():
@@ -147,27 +148,20 @@ class TwitterBrawl():
                 self.tf_idf[doc] = tf_idf
 
 
-                            #print word 
-            #print self.tf_idf[0]['a']
-            #determine highest scores
-            comparison_scores = {}
+            # Calculate most similary used words
             for doc in range(1,len(self.tf_idf)): #in each documents of tweets...
+                comparison_scores = {}
                 for word in self.tf_idf[doc].keys(): #for every word
-                    if (self.tf_idf[doc][word] != 0 or self.tf_idf[0][word] != 0):
+                    if (self.tf_idf[doc][word] != 0 and self.tf_idf[0][word] != 0):
                         comparison_scores[word] = abs(self.tf_idf[doc][word] - self.tf_idf[0][word])
                     else:
                         comparison_scores[word] = 100
                 self.top_5[doc] = comparison_scores
 
-            #print comparison_scores
-            for doc in range(1,len(self.top_5)):
-                print doc
+            # Only save the top 5 most similar words
+            for doc in range(1,len(self.tf_idf)):
                 self.top_5[doc] = sorted(self.top_5[doc].items(), key = lambda i: i[1])[:5]
-                print self.top_5[doc]
-            print "dic 1"
-            print self.top_5[1]
-            print "dic 2"
-            print self.top_5[2]
+
 
                 
             '''
@@ -223,34 +217,63 @@ class TwitterBrawl():
                     self.tf_idf[doc_id] = tf_idf_dict
             '''
 
-'''
+
 def main():
-        mainUser = twitterUsers.TwitterUser()
-        mainUser.get_information("jnowotny")
-        mainUser.get_friends()
-        #print mainUser.user_text
-        #return
-        user1 = twitterUsers.TwitterUser()
-        user1.get_information("deandrejordan")
-        user2 = twitterUsers.TwitterUser()
-        user2.get_information("jmanziel2")
-        tb_tweets = TwitterBrawl()
-        tb_hashtags = TwitterBrawl()
-        tb_tweets.index(mainUser.user_text, user1.user_text, user2.user_text)
-        tb_hashtags.index(mainUser.user_hashtags, user1.user_hashtags, user2.user_hashtags)
-        hashtag_scores = tb_hashtags.bestCosineSim()
-        tweet_scores = tb_tweets.bestCosineSim()
-        
+    
+    mainUser = twitterUsers.TwitterUser()
+    mainUser.get_information("kmystic524")
+    mainUser.get_friends()
+    user1 = twitterUsers.TwitterUser()
+    user1.get_information("cmdit")
+    user1.get_friends()
+    user2 = twitterUsers.TwitterUser()
+    user2.get_information("TheRealCaverlee")
+    user2.get_friends()
+    tb_tweets = TwitterBrawl()
+    tb_hashtags = TwitterBrawl()
+    #tb_friends = TwitterBrawl()
 
-        
-        f1_score = .6*hashtag_scores[0] + .4*tweet_scores[0]
-        f2_score = .6*hashtag_scores[1] + .4*tweet_scores[1]
-        
-        if max(f1_score,f2_score) == f1_score:
-                print "You're best friends with " + user1.user_name + "!"
-        else:
-                print "You're best friends with " + user2.user_name + "!"
+    tb_tweets.index(mainUser.user_text, user1.user_text, user2.user_text)
+    tb_hashtags.index(mainUser.user_hashtags, user1.user_hashtags, user2.user_hashtags)
+    #tb_friends.index(mainUser.friend_ids, user1.friend_ids, user2.friend_ids)
 
+
+    hashtag_scores = tb_hashtags.bestCosineSim()
+    tweet_scores = tb_tweets.bestCosineSim()
+    friend_scores = []
+    friend_scores.append(len(set(mainUser.friend_ids).intersection(user1.friend_ids)))
+    friend_scores.append(len(set(mainUser.friend_ids).intersection(user2.friend_ids)))
+    print "Friends in common with user 1: "
+    print friend_scores[0]
+    print "Friends in common with user 2: "
+    print friend_scores[1]
+    #.6*hashtag_scores[0]
+    f1_score = .5*hashtag_scores[0] + .35*tweet_scores[0] + .15*friend_scores[0]
+    f2_score = .5*hashtag_scores[1] + .35*tweet_scores[1] + .15*friend_scores[1]
+    top_tweet = {}
+    top_tweet[1] = [x[0] for x in  tb_tweets.top_5[1]] 
+    top_tweet[2] = [x[0] for x in  tb_tweets.top_5[2]] 
+    print "Top 5 common words with user 1: "
+    for word in top_tweet[1]:
+        print word
+    print "Top 5 common words with user 2: "
+    for word in top_tweet[2]:
+        print word
+
+
+    #.6*hashtag_scores[0]
+    if max(f1_score,f2_score) == f1_score:
+            print "You're best friends with " + user1.user_name + "!"
+    else:
+            print "You're best friends with " + user2.user_name + "!"
+
+
+    '''
+    main_text = "banana and strawberry smoothie are the best, most fantastic smoothies ever! "
+    opp1_text = "bananas are the best thing in the world, I can't believe how tasty they are"
+    opp2_text = "strawberries are fantastic, I can't believe I've never eaten a strawberry before"
+    tb_tweets = TwitterBrawl()
+    tb_tweets.index(main_text, opp1_text, opp2_text)
+    '''
 if __name__ == "__main__":
         main()
-'''

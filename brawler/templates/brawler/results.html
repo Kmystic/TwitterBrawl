@@ -41,7 +41,7 @@
     </colgroup>
     <td align = "center">
       <h2>{{opponent1}}</h2>
-      <img src="../../static/brawler/media/{{opponent1}}.jpg" title="{{opponent1}}"padding:5px; width="50%" height="auto"/ >
+      <img src="{{opp1_photo}}" title="{{opponent1}}"padding:5px; width="50%" height="auto"/ >
       <br>
       <p align = "left">
         <!--
@@ -70,7 +70,7 @@
     </td>
     <td align = center>
         <h2> {{opponent2}} </h2>
-        <img src="../../static/brawler/media/{{opponent2}}.jpg" title="{{opponent2}}"padding:5px; width="50%" height="auto"/>
+        <img src="{{opp2_photo}}" title="{{opponent2}}"padding:5px; width="50%" height="auto"/>
         <p align = "left">
         <br>
         <!--
@@ -95,7 +95,11 @@
 </table>
 
 <h1> Winner is {{winner}}! </h2>
-<img src="../../static/brawler/media/{{winner}}.jpg" title="{{winner}}"padding:5px; width="20%" height="auto" />
+  {% if winner == opponent1 %}
+<img src="{{opp1_photo}}" title="{{winner}}"padding:5px; width="20%" height="auto"/>
+   {% else %}
+   <img src="{{opp2_photo}}" title="{{winner}}"padding:5px; width="20%" height="auto"/>
+   {% endif %}
 
 </div>
 

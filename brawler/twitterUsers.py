@@ -12,9 +12,12 @@ class TwitterUser():
                 self.user_tweets = [] 
                 self.user_tweet_texts = []
                 self.user_text = ""
-                self.user_friends = []
+                self.user_friends = [] # Friend's screen names
+                self.friend_ids = [] # Friend's user ids
+                self.friend_names = [] # Friend's real names
                 self.user_hashtags = ""
                 self.user_id = ""
+                self.number_id = ""
 
         # Get user's name, tweets, and hashtags
         def get_information(self, user_id):
@@ -22,7 +25,8 @@ class TwitterUser():
                 user = tc.get_user_profile(user_id)
                 self.user_name = user.name
                 self.user_id = user_id
-                self.user_tweets = tc.get_user_tweets(user_id, 200)
+                self.number_id = user.id
+                self.user_tweets = tc.get_user_tweets(user_id, 10)
                 for tweet in self.user_tweets:
                         self.user_tweet_texts.append(tweet.__getstate__()['text'].encode('ascii','ignore'))        
                 for tweet in self.user_tweet_texts:
@@ -31,10 +35,20 @@ class TwitterUser():
                                 self.user_hashtags = self.user_hashtags + " " + hashtag
                                 text = text.replace(hashtag, "")
                         self.user_text = self.user_text + " " + text
+
         # Get user's friends
         def get_friends(self):        
                 tc = twitterCalls.TwitterCaller()
-                self.user_friends = tc.get_friends(self.user_id)
+                friends = tc.get_friends(self.user_id)
+                for friend in friends:
+                        self.user_friends.append(friend.screen_name)
+                        self.friend_ids.append(friend.id)
+                        self.friend_names.append(friend.name)
+        '''
+        def get_all_friends(self):
+                tc = twitterCalls.TwitterCaller()
+                self.friend_ids = tc.get_all_friends(self.user_id)
+        '''
 
         # Get user's profile photo
         def get_photo(self):
