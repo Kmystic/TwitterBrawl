@@ -46,8 +46,13 @@ class TwitterCaller():
 
 	# Get user's friends (i.e. the people they follow)
 	def get_friends(self, user_id):
-		friends = self.api.friends(user_id, count = 10)
+		friends = self.api.friends(user_id, count = 250)
 		return friends
+
+	# Get array of ids of user's friends (to be used for comparisons)
+	def get_friend_ids(self, user_id):
+		friend_ids = self.api.friends_ids(user_id)
+		return friend_ids
 
 	# Get user's count number of tweets
 	def get_user_tweets(self, user_id, count):

@@ -41,7 +41,7 @@ def getUser(username):
     global tb
     tb.get_information(username)
     tb.get_friends()
-    tb.get_all_friends()
+    tb.get_friend_ids()
     global OPPONENT_CHOICES
     for friend_id in (tb.user_friends):
         OPPONENT_CHOICES.append(friend_id)
@@ -126,43 +126,43 @@ def brawl_function(request):
 
     opp1 = twitterUsers.TwitterUser()
     opp1.get_information(opponent_1)
-    opp1.get_all_friends()
+    opp1.get_friend_ids()
     opp1_photo = opp1.get_photo()
 
     opp2 = twitterUsers.TwitterUser()
     opp2.get_information(opponent_2)
-    #opp2.get_all_friends()
+    opp2.get_friend_ids()
     opp2_photo = opp2.get_photo()
  
     twitter_tweets = twitterBrawl.TwitterBrawl()
     twitter_hashtags = twitterBrawl.TwitterBrawl()
-    #twitter_friends = twitterBrawl.TwitterBrawl()
+    twitter_friends = twitterBrawl.TwitterBrawl()
 
     twitter_tweets.index(main_user.user_text, opp1.user_text, opp2.user_text)
     twitter_hashtags.index(main_user.user_hashtags, opp1.user_hashtags, opp2.user_hashtags)
-    #twitter_friends.index(main_user.friend_ids, opp1.friend_ids, opp2.friend_ids)
-    print main_user.friend_ids
+    twitter_friends.index(main_user.friend_ids, opp1.friend_ids, opp2.friend_ids)
+    #print main_user.friend_ids
 
     hashtag_scores = twitter_hashtags.bestCosineSim()
     tweet_scores = twitter_tweets.bestCosineSim()
-    friend_scores = 0# = twiiter_friends.bestCosineSim()
+    friend_scores = twitter_friends.bestCosineSim()
 
-    op1_score = .5*hashtag_scores[0] + .35*tweet_scores[0] #+ .15*friend_scores[0]
-    op2_score = .5*hashtag_scores[1] + .35*tweet_scores[1] #+ .15*friend_scores[1]
+    op1_score = .5*hashtag_scores[0] + .35*tweet_scores[0] + .15*friend_scores[0]
+    op2_score = .5*hashtag_scores[1] + .35*tweet_scores[1] + .15*friend_scores[1]
 
 	#twitter_friends = twitterBrawl.TwitterBrawl()
 	
 
-    twitter_tweets.index(main_user.user_text, opp1.user_text, opp2.user_text)
-    twitter_hashtags.index(main_user.user_hashtags, opp1.user_hashtags, opp2.user_hashtags)
+    #twitter_tweets.index(main_user.user_text, opp1.user_text, opp2.user_text)
+    #twitter_hashtags.index(main_user.user_hashtags, opp1.user_hashtags, opp2.user_hashtags)
 	#twitter_friends.index(main_user.friend_ids, opp1.friend_ids, opp2.friend_ids)
 
-    hashtag_scores = twitter_hashtags.bestCosineSim()
-    tweet_scores = twitter_tweets.bestCosineSim()
+    #hashtag_scores = twitter_hashtags.bestCosineSim()
+    #tweet_scores = twitter_tweets.bestCosineSim()
     #friend_scores = twiiter_friends.bestCosineSim()
 
-    op1_score = .5*hashtag_scores[0] + .35*tweet_scores[0] + .15*friend_scores[0]
-    op2_score = .5*hashtag_scores[1] + .35*tweet_scores[1] + .15*friend_scores[1]
+    #op1_score = .5*hashtag_scores[0] + .35*tweet_scores[0] + .15*friend_scores[0]
+    #op2_score = .5*hashtag_scores[1] + .35*tweet_scores[1] + .15*friend_scores[1]
 	
 
     win = ""
@@ -181,10 +181,10 @@ def brawl_function(request):
     top_tweet = {}
     top_tweet[1] = [x[0] for x in  twitter_tweets.top_5[1]] 
     top_tweet[2] = [x[0] for x in  twitter_tweets.top_5[2]] 
-    #top_friend = {}
+    top_friend = {}
 
-    #top_friend[1] = [x[0] for x in twitter_friends.top_5[1]]
-    #top_friend[2] = [x[0] for x in twitter_friends.top_5[2]]
+    top_friend[1] = [x[0] for x in twitter_friends.top_5[1]]
+    top_friend[2] = [x[0] for x in twitter_friends.top_5[2]]
 
     context = {'logged_in':isLogged,
             'opponent1' : opponent_1, 
@@ -192,7 +192,7 @@ def brawl_function(request):
             'winner': win, 
             'hashtag' :hashtag_scores, 
             'tweet' : tweet_scores,
-            #'friend' : friend_scores,
+            'friend' : friend_scores,
             'top_hashtags' : top_hash,
             'top_tweets' : top_tweet,
             'opp1_photo' : opp1_photo,
