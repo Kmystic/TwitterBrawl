@@ -12,14 +12,9 @@ class TwitterUser():
                 self.user_tweets = [] 
                 self.user_tweet_texts = []
                 self.user_text = ""
-<<<<<<< HEAD
                 self.user_friends = [] # Friend's screen names
                 self.friend_ids = [] # Friend's user ids
                 self.friend_names = [] # Friend's real names
-=======
-                self.user_friends = []
-                self.friend_ids = []
->>>>>>> fe46b852842e1d8a3332a43cba4cb76b57cbe94a
                 self.user_hashtags = ""
                 self.user_id = ""
                 self.number_id = ""
@@ -31,11 +26,7 @@ class TwitterUser():
                 self.user_name = user.name
                 self.user_id = user_id
                 self.number_id = user.id
-<<<<<<< HEAD
                 self.user_tweets = tc.get_user_tweets(user_id, 10)
-=======
-                self.user_tweets = tc.get_user_tweets(user_id, 200)
->>>>>>> fe46b852842e1d8a3332a43cba4cb76b57cbe94a
                 for tweet in self.user_tweets:
                         self.user_tweet_texts.append(tweet.__getstate__()['text'].encode('ascii','ignore'))        
                 for tweet in self.user_tweet_texts:
@@ -53,15 +44,6 @@ class TwitterUser():
                         self.user_friends.append(friend.screen_name)
                         self.friend_ids.append(friend.id)
                         self.friend_names.append(friend.name)
-        '''
-        def get_all_friends(self):
-                tc = twitterCalls.TwitterCaller()
-                self.friend_ids = tc.get_all_friends(self.user_id)
-        '''
-
-		def get_all_friends(self):
-				tc = twitterCalls.TwitterCaller()
-                self.friend_ids = tc.get_all_friends(self.user_id)
 
         # Get user's profile photo
         def get_photo(self):

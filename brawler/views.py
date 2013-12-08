@@ -127,40 +127,16 @@ def brawl_function(request):
     opp1 = twitterUsers.TwitterUser()
     opp1.get_information(opponent_1)
     opp1.get_all_friends()
-<<<<<<< HEAD
     opp1_photo = opp1.get_photo()
-    #"https://si0.twimg.com/profile_images/" + str(opp1.number_id) + "/avatar.png"
-    '''
-    photoName = "brawler/static/brawler/media/" + str(opponent_1) + ".jpg"
-=======
-    profilePhotoURL = "https://si0.twimg.com/profile_images/" + str(opp1.number_id) + "/avatar.png"
-    photoName = "brawler/static/brawler/media/" + str(opponent_1) + ".png"
->>>>>>> fe46b852842e1d8a3332a43cba4cb76b57cbe94a
-    file = str(photoName)
-    f = open(file,'wb')
-    f.write(urllib.urlopen(profilePhotoURL).read())
-    '''
+
     opp2 = twitterUsers.TwitterUser()
     opp2.get_information(opponent_2)
-    opp2.get_all_friends()
-<<<<<<< HEAD
+    #opp2.get_all_friends()
     opp2_photo = opp2.get_photo()
-    #"https://si0.twimg.com/profile_images/" + str(opp2.number_id) + "/avatar.png"
-    '''
-    
-    photoName = "brawler/static/brawler/media/" + str(opponent_2) + ".jpg"
-=======
-    profilePhotoURL = "https://si0.twimg.com/profile_images/" + str(opp2.number_id) + "/avatar.png"
-    photoName = "brawler/static/brawler/media/" + str(opponent_2) + ".png"
->>>>>>> fe46b852842e1d8a3332a43cba4cb76b57cbe94a
-    file = str(photoName)
-    f = open(file,'wb')
-    f.write(urllib.urlopen(profilePhotoURL).read())
-    '''
+ 
     twitter_tweets = twitterBrawl.TwitterBrawl()
     twitter_hashtags = twitterBrawl.TwitterBrawl()
-<<<<<<< HEAD
-    twitter_friends = twitterBrawl.TwitterBrawl()
+    #twitter_friends = twitterBrawl.TwitterBrawl()
 
     twitter_tweets.index(main_user.user_text, opp1.user_text, opp2.user_text)
     twitter_hashtags.index(main_user.user_hashtags, opp1.user_hashtags, opp2.user_hashtags)
@@ -173,22 +149,21 @@ def brawl_function(request):
 
     op1_score = .5*hashtag_scores[0] + .35*tweet_scores[0] #+ .15*friend_scores[0]
     op2_score = .5*hashtag_scores[1] + .35*tweet_scores[1] #+ .15*friend_scores[1]
-=======
-	twitter_friends = twitterBrawl.TwitterBrawl()
+
+	#twitter_friends = twitterBrawl.TwitterBrawl()
 	
 
     twitter_tweets.index(main_user.user_text, opp1.user_text, opp2.user_text)
     twitter_hashtags.index(main_user.user_hashtags, opp1.user_hashtags, opp2.user_hashtags)
-	twitter_friends.index(main_user.friend_ids, opp1.friend_ids, opp2.friend_ids)
+	#twitter_friends.index(main_user.friend_ids, opp1.friend_ids, opp2.friend_ids)
 
     hashtag_scores = twitter_hashtags.bestCosineSim()
     tweet_scores = twitter_tweets.bestCosineSim()
-    friend_scores = twiiter_friends.bestCosineSim()
+    #friend_scores = twiiter_friends.bestCosineSim()
 
     op1_score = .5*hashtag_scores[0] + .35*tweet_scores[0] + .15*friend_scores[0]
     op2_score = .5*hashtag_scores[1] + .35*tweet_scores[1] + .15*friend_scores[1]
 	
->>>>>>> fe46b852842e1d8a3332a43cba4cb76b57cbe94a
 
     win = ""
 
@@ -206,25 +181,18 @@ def brawl_function(request):
     top_tweet = {}
     top_tweet[1] = [x[0] for x in  twitter_tweets.top_5[1]] 
     top_tweet[2] = [x[0] for x in  twitter_tweets.top_5[2]] 
-    top_friend = {}
-<<<<<<< HEAD
+    #top_friend = {}
+
     #top_friend[1] = [x[0] for x in twitter_friends.top_5[1]]
     #top_friend[2] = [x[0] for x in twitter_friends.top_5[2]]
-=======
-    top_friend[1] = [x[0] for x in twitter_friends.top_5[1]]
-    top_friend[2] = [x[0] for x in twitter_friends.top_5[2]]
->>>>>>> fe46b852842e1d8a3332a43cba4cb76b57cbe94a
+
     context = {'logged_in':isLogged,
             'opponent1' : opponent_1, 
             'opponent2':opponent_2, 
             'winner': win, 
             'hashtag' :hashtag_scores, 
             'tweet' : tweet_scores,
-<<<<<<< HEAD
-            'friend' : friend_scores,
-=======
-            'friend (score)' : friend_scores,
->>>>>>> fe46b852842e1d8a3332a43cba4cb76b57cbe94a
+            #'friend' : friend_scores,
             'top_hashtags' : top_hash,
             'top_tweets' : top_tweet,
             'opp1_photo' : opp1_photo,
