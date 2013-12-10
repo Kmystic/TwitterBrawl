@@ -15,6 +15,7 @@ from django.core.mail import EmailMessage
 from django import forms
 from django.db import models
 import urllib
+import math
 import twitterUsers
 import twitterCalls
 import twitterBrawl
@@ -141,23 +142,24 @@ def brawl_function(request):
     tweet_scores = twitter_tweets.bestCosineSim()
     friend_scores = twitter_friends.bestCosineSim()
 
-    #op1_score = .5*hashtag_scores[0] + .35*tweet_scores[0] + .15*friend_scores[0]
-    #op2_score = .5*hashtag_scores[1] + .35*tweet_scores[1] + .15*friend_scores[1]
+    op1_score = (.5*hashtag_scores[0] + .35*tweet_scores[0] + .15*friend_scores[0]) * 1000
+    op1_score = int(op1_score * 100 + .5)/100.0
+    op2_score = (.5*hashtag_scores[1] + .35*tweet_scores[1] + .15*friend_scores[1]) * 1000
+	op2_score = int(op2_score * 100 + .5)/100.0
+	
+    tweet_scores[0] = op1_score * .5
+    tweet_scores[0] = int(tweet_scores[0] * 100 + .5)/100.0
+    hashtag_scores[0] = op1_score * .35
+    hashtag_scores[0] = int(hashtag_scores[0] * 100 + .5)/100.0
+    friend_scores[0] = op1_score * .15
+    friend_scores[0] = int(friend_scores[0] * 100 + .5)/100.0
 
-    total_tweet_score = max(1,tweet_scores[0] + tweet_scores[1])
-    total_hashtag_score = max(1,hashtag_scores[0] + hashtag_scores[1])
-    total_friend_score = max(1,friend_scores[0] + friend_scores[1])
-
-    tweet_scores[0] = (tweet_scores[0]/total_tweet_score) * 100 *.35
-    hashtag_scores[0] = (hashtag_scores[0]/total_hashtag_score) * 100 *.5
-    friend_scores[0] = (friend_scores[0]/total_friend_score) * 100 * .15
-
-    tweet_scores[1] = (tweet_scores[1]/total_tweet_score) * 100 *.35
-    hashtag_scores[1] = (hashtag_scores[1]/total_hashtag_score) * 100 *.5
-    friend_scores[1] = (friend_scores[1]/total_friend_score) * 100 * .15
-
-    op1_score = tweet_scores[0] + hashtag_scores[0] + friend_scores[0]
-    op2_score = tweet_scores[1] + hashtag_scores[1] + friend_scores[1]
+    tweet_scores[1] = op2_score * .5
+    tweet_scores[1] = int(tweet_scores[1] * 100 + .5)/100.0
+    hashtag_scores[1] = op2_score * .35
+    hashtag_scores[1] = int(hashtag_scores[1] * 100 + .5)/100.0
+    friend_scores[1] = op2_score * .15
+    friend_scores[1] = int(friend_scores[1] * 100 + .5)/100.0
 
     friend_common = []
     friend_common.append(len(set(main_user.friend_ids_list).intersection(opp1.friend_ids_list)))
