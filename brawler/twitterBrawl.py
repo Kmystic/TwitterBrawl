@@ -221,7 +221,40 @@ class TwitterBrawl():
 def main():
     
     mainUser = twitterUsers.TwitterUser()
-    mainUser.get_information("jnowotny")
+    mainUser.get_information("TheRealCaverlee")
+    mainUser.get_friend_ids()
+    mainUser.get_friends()
+    result = {}
+    result['id'] = 'TheRealCaverlee'
+    result['friend_ids'] = mainUser.friend_ids
+    result['friend_ids_list'] = mainUser.friend_ids_list
+    result['text'] = mainUser.user_text
+    result['hash_tag'] = mainUser.user_hashtags
+    with open('TheRealCaverlee.json', 'w') as outfile:
+        json.dump(result,outfile)
+    
+    
+    friend_list = ["AndrewYNg", "AugurNews", "RobertJShiller", "Elysia", "ProfJeffJarvis"]
+
+    for friend in friend_list:
+        user = twitterUsers.TwitterUser()
+        user.get_information(friend)
+        user.get_friend_ids()
+        result = {}
+        result['id'] = friend
+        result['friend_ids'] = user.friend_ids
+        result['friend_ids_list'] = user.friend_ids_list
+        result['text'] = user.user_text
+        result['hash_tag'] = user.user_hashtags
+        result['photo'] = user.get_photo()
+        with open(friend +'.json', 'w') as outfile:
+            json.dump(result,outfile)
+
+    
+    
+    '''
+    mainUser = twitterUsers.TwitterUser()
+    mainUser.get_information("TheRealCaverlee")
     mainUser.get_friend_ids()
     user1 = twitterUsers.TwitterUser()
     user1.get_information("JerrodJohnson1")
@@ -268,7 +301,7 @@ def main():
             print "You're best friends with " + user2.user_name + "!"
 
 
-    '''
+    
     main_text = "banana and strawberry smoothie are the best, most fantastic smoothies ever! "
     opp1_text = "bananas are the best thing in the world, I can't believe how tasty they are"
     opp2_text = "strawberries are fantastic, I can't believe I've never eaten a strawberry before"

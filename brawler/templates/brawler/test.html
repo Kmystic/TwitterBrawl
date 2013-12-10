@@ -3,7 +3,7 @@
 <html>
 {% load staticfiles %}
 <head>
-  <title>TwitterBrawl - Brawl</title>
+  <title>TwitterBrawl - Test</title>
   <link  rel="stylesheet" type="text/css" href="{% static 'brawler/style.css' %}" />
 </head>
 
@@ -20,14 +20,15 @@
   <li><a href="/logout">Logout</a></li>
   <li><a href="/about">About</a></li>
   <li><a href="/brawl">Brawl</a></li>
-   <li><a href="/test">Test</a></li>
+  <li><a href="/test">Test</a></li>
 </ul>
 
 <hr class="horizontal">
 <!--END header-->
 
 <!--BEGIN body-->
-<h1 align = "center"> Brawl </h1>
+<h1 align = "center"> Brawling Test </h1>
+<p>This page is a test page that reads relevent information from JSON files instead of API calls, the user being compared to is TheRealCaverlee</p>
 <div align="center">
   <table>
     <colgroup>
@@ -37,7 +38,7 @@
     </colgroup>
     {% if opponents1 %}
     {% if opponents2 %}
-    <form action="{% url 'brawler:brawl_function' %}" method = "post">
+    <form action="{% url 'brawler:test_function' %}" method = "post">
     {%csrf_token %}
       
       <tr>
