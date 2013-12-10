@@ -221,14 +221,14 @@ class TwitterBrawl():
 def main():
     
     mainUser = twitterUsers.TwitterUser()
-    mainUser.get_information("kmystic524")
-    mainUser.get_friends()
+    mainUser.get_information("jnowotny")
+    mainUser.get_friend_ids()
     user1 = twitterUsers.TwitterUser()
-    user1.get_information("cmdit")
-    user1.get_friends()
+    user1.get_information("JerrodJohnson1")
+    user1.get_friend_ids()
     user2 = twitterUsers.TwitterUser()
     user2.get_information("TheRealCaverlee")
-    user2.get_friends()
+    user2.get_friend_ids()
     tb_tweets = TwitterBrawl()
     tb_hashtags = TwitterBrawl()
     #tb_friends = TwitterBrawl()
@@ -241,8 +241,8 @@ def main():
     hashtag_scores = tb_hashtags.bestCosineSim()
     tweet_scores = tb_tweets.bestCosineSim()
     friend_scores = []
-    friend_scores.append(len(set(mainUser.friend_ids).intersection(user1.friend_ids)))
-    friend_scores.append(len(set(mainUser.friend_ids).intersection(user2.friend_ids)))
+    friend_scores.append(len(set(mainUser.friend_ids_list).intersection(user1.friend_ids_list)))
+    friend_scores.append(len(set(mainUser.friend_ids_list).intersection(user2.friend_ids_list)))
     print "Friends in common with user 1: "
     print friend_scores[0]
     print "Friends in common with user 2: "

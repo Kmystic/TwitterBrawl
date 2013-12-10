@@ -21,15 +21,10 @@ import twitterBrawl
 
 
 # Global Variables
-global opponent_1 
-global opponent_2 
-global user_name
-user_name = "" 
-global tb 
+user_name = ""
 tb = twitterUsers.TwitterUser()
-global OPPONENT_CHOICES
 OPPONENT_CHOICES = []
-global isLogged
+isLogged = False
 
 
 # Form to get username infomration from web application
@@ -37,15 +32,13 @@ class LoginForm(forms.Form):
     username = forms.CharField(max_length = 200, required=True)
 
 # Function to get a users information
+'''
 def getUser(username):
+    global isLogged
+    isLogged = True
     global tb
-    tb.get_information(username)
-    tb.get_friends()
-    tb.get_friend_ids()
-    global OPPONENT_CHOICES
-    for friend_id in (tb.user_friends):
-        OPPONENT_CHOICES.append(friend_id)
-        
+'''
+
 # Determines if a user is logged in
 def isLoggedIn():
     return isLogged
@@ -72,7 +65,16 @@ def login(request):
             isLogged = True
             global user_name
             user_name = form.cleaned_data['username']
-            getUser(form.cleaned_data['username'])
+            #getUser(form.cleaned_data['username'])
+            global tb
+            tb = twitterUsers.TwitterUser()
+            tb.get_information(form.cleaned_data['username'])
+            tb.get_friends()
+            tb.get_friend_ids()
+            '''
+            for friend_id in (tb.user_friends):
+                OPPONENT_CHOICES.append(friend_id)
+            '''
             real_name = tb.user_name
             context = {'username' : user_name, 'realname' : real_name, 'logged_in':isLogged}
             return render(request, 'brawler/verification.html', context) # Redirect after POST 
@@ -91,32 +93,25 @@ def login_verification(request):
 def logout(request):
     global isLogged
     isLogged = False
-    global OPPONENT_CHOICES
-    OPPONENT_CHOICES = []
     global user_name
     user_name = ""
-    global tb 
-    tb = twitterUsers.TwitterUser()
     return render(request,'brawler/logout.html', 0)
 
 # View for about.html
 def about(request):
-    print isLoggedIn()
-    context = {'logged_in':isLoggedIn()}
+    context = {'logged_in':isLogged}
     return render_to_response('brawler/about.html', context)
 
 # View for brawl.html
 def brawl(request):
-    global OPPONENT_CHOICES
-    OPPONENT_CHOICES= sorted(OPPONENT_CHOICES)
-    context = {'opponents1': OPPONENT_CHOICES, 'opponents2' : OPPONENT_CHOICES}
+    global tb
+    choices = sorted(tb.user_friends)
+    context = {'opponents1': choices, 'opponents2' : choices}
     return render(request, 'brawler/brawl.html', context)
 
 # Function for results.html
 def brawl_function(request):
     # This function handles the comparison calculations
-    global opponent_1
-    global opponent_2
    
     opponent_1 = request.POST['opponent1'] 
     opponent_2 = request.POST['opponent2']
@@ -141,29 +136,32 @@ def brawl_function(request):
     twitter_tweets.index(main_user.user_text, opp1.user_text, opp2.user_text)
     twitter_hashtags.index(main_user.user_hashtags, opp1.user_hashtags, opp2.user_hashtags)
     twitter_friends.index(main_user.friend_ids, opp1.friend_ids, opp2.friend_ids)
-    #print main_user.friend_ids
 
     hashtag_scores = twitter_hashtags.bestCosineSim()
     tweet_scores = twitter_tweets.bestCosineSim()
     friend_scores = twitter_friends.bestCosineSim()
 
-    op1_score = .5*hashtag_scores[0] + .35*tweet_scores[0] + .15*friend_scores[0]
-    op2_score = .5*hashtag_scores[1] + .35*tweet_scores[1] + .15*friend_scores[1]
-
-	#twitter_friends = twitterBrawl.TwitterBrawl()
-	
-
-    #twitter_tweets.index(main_user.user_text, opp1.user_text, opp2.user_text)
-    #twitter_hashtags.index(main_user.user_hashtags, opp1.user_hashtags, opp2.user_hashtags)
-	#twitter_friends.index(main_user.friend_ids, opp1.friend_ids, opp2.friend_ids)
-
-    #hashtag_scores = twitter_hashtags.bestCosineSim()
-    #tweet_scores = twitter_tweets.bestCosineSim()
-    #friend_scores = twiiter_friends.bestCosineSim()
-
     #op1_score = .5*hashtag_scores[0] + .35*tweet_scores[0] + .15*friend_scores[0]
     #op2_score = .5*hashtag_scores[1] + .35*tweet_scores[1] + .15*friend_scores[1]
-	
+
+    total_tweet_score = max(1,tweet_scores[0] + tweet_scores[1])
+    total_hashtag_score = max(1,hashtag_scores[0] + hashtag_scores[1])
+    total_friend_score = max(1,friend_scores[0] + friend_scores[1])
+
+    tweet_scores[0] = (tweet_scores[0]/total_tweet_score) * 100 *.35
+    hashtag_scores[0] = (hashtag_scores[0]/total_hashtag_score) * 100 *.5
+    friend_scores[0] = (friend_scores[0]/total_friend_score) * 100 * .15
+
+    tweet_scores[1] = (tweet_scores[1]/total_tweet_score) * 100 *.35
+    hashtag_scores[1] = (hashtag_scores[1]/total_hashtag_score) * 100 *.5
+    friend_scores[1] = (friend_scores[1]/total_friend_score) * 100 * .15
+
+    op1_score = tweet_scores[0] + hashtag_scores[0] + friend_scores[0]
+    op2_score = tweet_scores[1] + hashtag_scores[1] + friend_scores[1]
+
+    friend_common = []
+    friend_common.append(len(set(main_user.friend_ids_list).intersection(opp1.friend_ids_list)))
+    friend_common.append(len(set(main_user.friend_ids_list).intersection(opp2.friend_ids_list)))
 
     win = ""
 
@@ -182,7 +180,6 @@ def brawl_function(request):
     top_tweet[1] = [x[0] for x in  twitter_tweets.top_5[1]] 
     top_tweet[2] = [x[0] for x in  twitter_tweets.top_5[2]] 
     top_friend = {}
-
     top_friend[1] = [x[0] for x in twitter_friends.top_5[1]]
     top_friend[2] = [x[0] for x in twitter_friends.top_5[2]]
 
@@ -190,13 +187,17 @@ def brawl_function(request):
             'opponent1' : opponent_1, 
             'opponent2':opponent_2, 
             'winner': win, 
+            'op1_score' : op1_score,
+            'op2_score' : op2_score,
             'hashtag' :hashtag_scores, 
             'tweet' : tweet_scores,
             'friend' : friend_scores,
             'top_hashtags' : top_hash,
             'top_tweets' : top_tweet,
             'opp1_photo' : opp1_photo,
-            'opp2_photo' : opp2_photo}
+            'opp2_photo' : opp2_photo,
+            'friend_common' : friend_common}
+
     return render(request, 'brawler/results.html', context)
 
 # View for results.html

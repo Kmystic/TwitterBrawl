@@ -8,45 +8,6 @@
 </head>
 
 
-<!--
-
-<script type="text/javascript">
- 
-    function showOpponent(opponent) {
-      //alert(eventID);
-      var ProfileImgs = new Array();
-      var ProfileImgs=document.getElementsByTagName("img");
-    
-      // hide all profiles with the toggle class
-      for (i=0; i<ProfileImgs.length; i++) {
-        if (ProfileImgs[i].className=="toggle") {
-          ProfileImgs[i].style.display='none';
-        } 
-      }
-      
-    // show profile that is clicked
-    document.getElementById("profileimg_" + opponent).style.display = 'inline';
-    document.getElementById("hideimages").style.display = 'inline';
-
-
-    }
-    function hideAll() {
-      var ProfileImgs = new Array();
-      var ProfileImgs=document.getElementsByTagName("img");
-
-      // hide all profiles with the toggle class
-      for (i=0; i<ProfileImgs.length; i++) {
-        if (ProfileImgs[i].className=="toggle") {
-          ProfileImgs[i].style.display='none';
-        } 
-      }
-      
-    document.getElementById("hideimages").style.display = 'none';
-    }
-  
-</script>
--->
-
 <body>
 
 <!--BEGIN header-->
@@ -130,43 +91,3 @@
 
 </html>
 
-<!--
-
-<h1 align = "center"> Brawl </h1>
-<div align="center">
-  <table>
-    <colgroup>
-      <col style="width: 40%" />
-      <col style="width: 20%" />
-      <col style="width: 40%" />
-    </colgroup>
-    <form action="" method="post" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}> 
-      {%csrf_token %}
-      {{ form.non_field_errors }}
-      <tr>
-        <td align = center>
-          <div class="fieldWrapper">
-            {{ form.opponent1.errors }}
-            <label for="opponent1"><b>Opponent 1</b> <br></label>
-            {{ form.opponent1}}
-          </div>
-        </td>
-        <td align = center>
-          <h1> VS </h1>
-        </td>
-        <td align = center>
-          <div class="fieldWrapper">
-            {{ form.opponent2.errors }}
-            <label for="opponent2"><b>Opponent 2</b><br></label>
-            {{ form.opponent2}}
-          </div>
-        <td>
-      </tr>
-   
-  </table>
-
-  <br><br><br>
-  <input type="submit" value="Brawl!" />
-   </form>
-</div>
--->

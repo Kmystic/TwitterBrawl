@@ -44,24 +44,31 @@
       <img src="{{opp1_photo}}" title="{{opponent1}}"padding:5px; width="50%" height="auto"/ >
       <br>
       <p align = "left">
-        <!--
-      <b>Most Similar Hashtags:</b>
-      
-      {% for word in top_hashtags.1 %}
-          <br>{{word}}
-      {%endfor%}
-      -->
       <br>
       <b>Hashtag Text Cosine Simularity:</b> {{hashtag.0}}
       <br>
-      <b>Tweet Text Cosine Simularity:</b> {{tweet.0}}
+      {% if hashtag.0 != 0 %}
+      <b>Most Similar Hashtags:</b>
       <br>
-      <!--
+      {% for word in top_hashtags.1 %}
+          {{word}} <br>
+      {%endfor%}
+      
+      {% endif %}
+      <b>Tweet Text Cosine Simularity:</b> {{tweet.0}}
+       <br>
+      {% if tweet.0 != 0 %}
       <b>Most Similar Tweet Text:</b>
       {% for word in top_tweets.1 %}
-          <br>{{word}}
+          {{word}} <br>
       {%endfor%}
-    -->
+      
+      {% endif %}
+      <b> Friend Cosine Simularity:</b> {{friend.0}}
+      <br>
+      <b> Number of Friends in Common: </b> {{friend_common.0}}
+      <br>
+      <b> Total Score: </b> {{op1_score}}
       </p>
     </td>
 
@@ -73,22 +80,32 @@
         <img src="{{opp2_photo}}" title="{{opponent2}}"padding:5px; width="50%" height="auto"/>
         <p align = "left">
         <br>
-        <!--
-        <b>Most Similar Hashtags:</b>
-        {% for word in top_hashtags.2 %}
-            <br>{{word}}
-        {%endfor%}
-      -->
+         
         <b>Hashtag Text Cosine Simularity:</b> {{hashtag.1}}
         <br>
-        <!--
+        {% if hashtag.1 != 0 %}
+        <b>Most Similar Hashtags:</b>
+        {% for word in top_hashtags.2 %}
+            {{word}} <br>
+        {%endfor%}
+        
+        
+        {% endif %}
+        <b>Tweet Text Cosine Simularity:</b> {{tweet.1}}
+        <br>
+        {% if tweet.1 != 0 %}
         <b>Most Similar Tweet Text:</b>
         <br>
         {% for word in top_tweets.2 %}
-            <br>{{word}}
+            {{word}} <br>
         {%endfor%}
-      -->
-        <b>Tweet Text Cosine Simularity:</b> {{tweet.1}}
+        
+        {% endif %}
+        <b> Friend Cosine Simularity:</b> {{friend.1}}
+        <br>
+        <b> Number of Friends in Common: </b> {{friend_common.1}}
+        <br>
+         <b> Total Score: </b> {{op2_score}}
       </p>
     </td>
 

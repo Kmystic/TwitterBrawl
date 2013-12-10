@@ -14,6 +14,7 @@ import dj_database_url
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 from djangoappengine.settings_base import *
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -66,19 +67,7 @@ DATABASES = {
     }
 }
 
-'''
-DATABASES['native'] = { 
-        'ENGINE': 'djangoappengine.db', 
-        'HIGH_REPLICATION': True, 
-        'DEV_APPSERVER_OPTIONS': { 
-            'high_replication' : True, 
-            'use_sqlite': True, 
-            } 
-    } 
 
-DATABASES['default'] = {'ENGINE': 'dbindexer', 'TARGET': 'native'}
-#AUTOLOAD_SITECONF = 'indexes'
-'''
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
